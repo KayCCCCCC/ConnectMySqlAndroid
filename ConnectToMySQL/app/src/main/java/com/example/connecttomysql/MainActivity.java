@@ -1,16 +1,14 @@
 package com.example.connecttomysql;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,15 +23,28 @@ public class MainActivity extends AppCompatActivity {
     Connection connection;
     ResultSet resultSet;
     String name, str;
-TextView txtName;
+    TextView txtName;
+    Button btn_crudNavigation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        // Cấu hình StrictMode
-/*        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);*/
+
+        // References
+        btn_crudNavigation = (Button) findViewById(R.id.btn_crudNavigation);
+
+        // Btn click handler
+        btn_crudNavigation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { // On click button
+                // Navigate to MySQLActivity
+                Intent it = new Intent(MainActivity.this, MySQLActivity.class);
+                startActivity(it);
+            }
+        });
+
         connectionClass = new ConnectionClass();
         connect();
     }
@@ -42,7 +53,7 @@ TextView txtName;
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> {
             try {
-                connection = connectionClass.CON();
+                connection = connectionClass.getConnection();
                 String query = "SELECT * FROM prm392.user";
                 PreparedStatement statement = connection.prepareStatement(query);
                 ResultSet resultSet = statement.executeQuery();
@@ -71,7 +82,7 @@ TextView txtName;
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> {
             try {
-                connection = connectionClass.CON();
+                connection = connectionClass.getConnection();
                 if (connection == null){
                     str = "Error in connection with MySQL server";
                 }else{

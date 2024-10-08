@@ -8,12 +8,12 @@ import java.util.Objects;
 
 public class ConnectionClass {
     protected static String db = "prm392";
-    protected static String ip = "192.168.1.3"; // sửa thành ip cá nhân (cmd -> ipconfig -> ipv4)
+    protected static String ip = "192.168.1.61";
     protected static String port = "3306";
     protected static String username = "root";
-    protected static String password = "123456";
+    protected static String password = "12345678";
 
-    public Connection CON(){
+    public static Connection getConnection(){
         Connection connection = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
